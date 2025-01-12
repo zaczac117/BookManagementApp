@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>書籍管理アプリ</title>
+</head>
+<body>
+<h1>書籍一覧</h1>
+<table>
+    <tr>
+        <th>タイトル</th>
+        <th>著者</th>
+        <th>ジャンル</th>
+        <th>ステータス</th>
+        <th>返却期限</th>
+    </tr>
+<!--    <tr th:each="book : ${books}">-->
+<!--        <td th:text="${book.title}"></td>-->
+<!--        <td th:text="${book.author}"></td>-->
+<!--        <td th:text="${book.genre}"></td>-->
+<!--        <td th:text="${book.status}"></td>-->
+<!--        <td th:text="${book.returnDate}"></td>-->
+<!--    </tr>-->
+</table>
+<h2>本を追加</h2>
+<form action="/addBook" method="post">
+    <input type="text" name="title" placeholder="タイトル" required>
+    <input type="text" name="author" placeholder="著者">
+    <input type="text" name="genre" placeholder="ジャンル">
+    <button type="submit">追加</button>
+</form>
+</body>
+</html>
