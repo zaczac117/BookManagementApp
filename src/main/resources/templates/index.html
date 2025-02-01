@@ -3,30 +3,96 @@
 <head>
     <title>書籍管理アプリ</title>
 </head>
+<style>
+    .button-container {
+        /* ボタン：横に並べる */
+        display: flex;
+        /* ボタン：間隔 */
+        gap: 10px;
+    }
+</style>
+<script>
+    function showCheckbox() {
+        // チェックボックス取得
+        let checkboxes = document.querySelectorAll('input[type="checkbox"][name="selectedBooks"]');
+        // テーブルヘッダー「アクション」取得
+        let actionHeader = document.getElementById('action-header');
+        //　「追加」ボタン取得
+        let addBtn = document.getElementById('add-btn');
+        // 送信用フォーム取得
+        let addForm = document.getElementById('add-form');
+        // 「更新」ボタン取得
+        let updateBtn = document.getElementById('update-btn');
+        // 「削除」ボタン取得
+        let deleteBtn = document.getElementById('delete-btn');
+
+        // 各チェックボックスの表示/非表示を切り替える
+        checkboxes.forEach(checkbox => {
+            // 「編集」ボタン押下：チェックボックス、「アクション」、「追加」ボタン、送信用フォーム、「更新」ボタン、「削除」ボタン 表示
+            if (checkbox.style.display === "none") {
+                checkbox.style.display = "block";
+                actionHeader.style.display　= "block"
+                addBtn.style.display = "block"
+                addForm.style.display = "block"
+                updateBtn.style.display = "block"
+                deleteBtn.style.display = "block"
+            } else {
+            // 「編集」ボタン押下：チェックボックス、「アクション」、「追加」ボタン、送信用フォーム、「更新」ボタン、「削除」ボタン 非表示
+                checkbox.style.display = "none";
+                actionHeader.style.display = "none";
+                addBtn.style.display = "none";
+                addForm.style.display = "none";
+                updateBtn.style.display = "none";
+                deleteBtn.style.display = "none";
+            }
+        });
+    }
+
+    // 「追加」ボタン押下：入力フォームの内容送信
+    function submitForm() {
+        document.getElementById('add-form').submit();
+    }
+</script>
 <body>
+<!--ヘッダー-->
+<!--タイトル-->
 <h1>書籍一覧</h1>
+<!--テーブル-->
 <table>
+    <thead>
     <tr>
+        <th>ID</th>
         <th>タイトル</th>
         <th>著者</th>
         <th>ジャンル</th>
-        <th>ステータス</th>
-        <th>返却期限</th>
+        <th id="action-header" style="display: none;">アクション</th>
     </tr>
+    </thead>
+    <tbody>
     <tr th:each="book : ${books}">
+        <td th:text="${book.id}"></td>
         <td th:text="${book.title}"></td>
         <td th:text="${book.author}"></td>
         <td th:text="${book.genre}"></td>
-<!--        <td th:text="${book.status}"></td>-->
-<!--        <td th:text="${book.returnDate}"></td>-->
+        <td>
+            <input type="checkbox" th:id="'checkbox-' + ${book.id}" th:name="selectedBooks"
+                   th:value="${book.id}" style="display: none;">
+        </td>
     </tr>
+    </tbody>
 </table>
-<h2>本を追加</h2>
-<form action="/addBook" method="post">
+<!-- ボタン -->
+<div class="button-container">
+    <button type="button" onclick="showCheckbox()">編集</button>
+    <button type="button" id="add-btn" style="display: none;" onclick="submitForm()">追加</button>
+    <button type="button" id="update-btn" style="display: none;">更新</button>
+    <button type="button" id="delete-btn" style="display: none;">削除</button>
+</div>
+<!--入力フォーム-->
+<form action="/addBook" id="add-form" style="display: none;" method="post">
     <input type="text" name="title" placeholder="タイトル" required>
     <input type="text" name="author" placeholder="著者">
     <input type="text" name="genre" placeholder="ジャンル">
-    <button type="submit">追加</button>
 </form>
 </body>
 </html>
