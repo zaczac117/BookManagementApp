@@ -24,32 +24,36 @@ public class Book {
     public enum Status {
         空, 申請中, 貸出中, 追加予定
     }
-    // Getters and Setters
-    public Long getId(){
+
+    public Long getId() {
         return id;
     }
 
-    public String getTitle(){
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title){
+    public void setTitle(String title) {
         this.title = title;
     }
 
-    public String getAuthor(){
+    public String getAuthor() {
         return author;
     }
 
-    public void setAuthor(String author){
+    public void setAuthor(String author) {
         this.author = author;
     }
 
-    public String getGenre(){
+    public String getGenre() {
         return genre;
     }
 
-    public void setGenre(String genre){
+    public void setGenre(String genre) {
         this.genre = genre;
     }
 }

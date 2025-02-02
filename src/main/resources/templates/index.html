@@ -52,6 +52,52 @@
     function submitForm() {
         document.getElementById('add-form').submit();
     }
+
+    // 「削除」ボタン押下：選択されたIDの書籍削除
+    function deleteSelectedBooks() {
+        // 選択されたチェックボックス取得
+        let selectedIds = [];
+        let checkboxes = document.querySelectorAll('input[type="checkbox"][name="selectedBooks"]:checked');
+
+        checkboxes.forEach(checkbox => {
+            selectedIds.push(checkbox.value);
+        });
+
+        // チェックボックス未選択
+        if (selectedIds.length === 0) {
+            alert("削除する本を選択してください");
+            return;
+        }
+
+        // 確認ダイアログ表示
+        let isConfirmed = confirm("選択した本を削除しますか？");
+        if (!isConfirmed) {
+            return;
+        }
+
+        // 選択されたIDをサーバーに送信（Fetch APIを使用）
+        fetch("/deleteBooks", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ ids: selectedIds })
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error("削除に失敗しました");
+            }
+            return response.json();
+        })
+        .then(data => {
+            alert(data.message);
+            location.reload();
+        })
+        .catch(error => {
+            console.error("エラー:", error);
+            alert("削除に失敗しました");
+        });
+    }
 </script>
 <body>
 <!--ヘッダー-->
@@ -86,7 +132,7 @@
     <button type="button" onclick="showCheckbox()">編集</button>
     <button type="button" id="add-btn" style="display: none;" onclick="submitForm()">追加</button>
     <button type="button" id="update-btn" style="display: none;">更新</button>
-    <button type="button" id="delete-btn" style="display: none;">削除</button>
+    <button type="button" id="delete-btn" style="display: none;" onclick="deleteSelectedBooks()">削除</button>
 </div>
 <!--入力フォーム-->
 <form action="/addBook" id="add-form" style="display: none;" method="post">
