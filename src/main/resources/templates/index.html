@@ -53,6 +53,57 @@
         document.getElementById('add-form').submit();
     }
 
+    // 「更新」ボタン押下：入力フォームの内容送信
+        function showUpdateForm() {
+        let checkboxes = document.querySelectorAll('input[type="checkbox"][name="selectedBooks"]:checked');
+        let updateFields = document.getElementById("update-fields");
+        let updateForm = document.getElementById("update-form");
+        let submitBtn = document.getElementById("submit-btn");
+
+        // 要素が見つからない場合の対策
+        if (!updateFields || !updateForm || !submitBtn) {
+            console.error("更新フォームの要素が見つかりません。HTMLにid='update-fields'が正しく設定されているか確認してください。");
+            return;
+        }
+
+        // チェックボックス未選択
+        if (checkboxes.length === 0) {
+            alert("更新する本を選択してください");
+            return;
+        }
+
+        // フォームをクリア
+        updateFields.innerHTML = "";
+
+        checkboxes.forEach(checkbox => {
+            let bookId = checkbox.value;
+
+            // フォームを追加
+            updateFields.innerHTML += `
+                <div>
+                    <input type="hidden" name="books[${bookId}].id" value="${bookId}">
+                    <input type="text" name="books[${bookId}].title" placeholder="タイトル" required>
+                    <input type="text" name="books[${bookId}].author" placeholder="著者">
+                    <input type="text" name="books[${bookId}].genre" placeholder="ジャンル">
+                </div>
+            `;
+        });
+
+        // フォームと送信ボタンを表示
+        if (checkboxes.length > 0) {
+            updateForm.style.display = "block";
+            submitBtn.style.display = "block";
+        } else {
+            updateForm.style.display = "none";
+            submitBtn.style.display = "none";
+        }
+    }
+
+    // 「追加」ボタン押下：入力フォームの内容送信
+    function updateForm() {
+        document.getElementById('update-form').submit();
+    }
+
     // 「削除」ボタン押下：選択されたIDの書籍削除
     function deleteSelectedBooks() {
         // 選択されたチェックボックス取得
@@ -131,7 +182,7 @@
 <div class="button-container">
     <button type="button" onclick="showCheckbox()">編集</button>
     <button type="button" id="add-btn" style="display: none;" onclick="submitForm()">追加</button>
-    <button type="button" id="update-btn" style="display: none;">更新</button>
+    <button type="button" id="update-btn" style="display: none;" onclick="showUpdateForm()">更新</button>
     <button type="button" id="delete-btn" style="display: none;" onclick="deleteSelectedBooks()">削除</button>
 </div>
 <!--入力フォーム-->
@@ -139,6 +190,10 @@
     <input type="text" name="title" placeholder="タイトル" required>
     <input type="text" name="author" placeholder="著者">
     <input type="text" name="genre" placeholder="ジャンル">
+</form>
+<form action="/updateBooks" id="update-form" style="display: none;" method="post">
+    <div id="update-fields"></div>
+    <button type="button" id="submit-btn" style="display: none;" onclick="updateForm()">送信</button>
 </form>
 </body>
 </html>
