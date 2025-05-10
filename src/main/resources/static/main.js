@@ -9,6 +9,9 @@
         // 送信用フォーム取得
         let addForm = document.getElementById('add-form');
         addForm.style.display = "block"
+        // 書籍カウント表示
+        let bookCount = document.getElementById('bookCount');
+        bookCount.style.display = "block"
     }
 
 /** 「登録」ボタン押下時に、入力フォームの内容を送信する関数 */
@@ -18,6 +21,29 @@
         }
         document.getElementById('add-form').submit();
     }
+
+/** 選択した数のフォームを生成する関数（最大10件） */
+function generateForms() {
+    const count = parseInt(document.getElementById("bookCount").value);
+    const container = document.getElementById("book-forms");
+    container.innerHTML = ""; // 既存フォームをクリア
+
+    for (let i = 0; i < count; i++) {
+        container.innerHTML += `
+            <div class="row mb-2">
+                <div class="col">
+                    <input type="text" class="form-control" name="books[${i}].title" placeholder="タイトル" required>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" name="books[${i}].author" placeholder="著者">
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control" name="books[${i}].genre" placeholder="ジャンル">
+                </div>
+            </div>
+        `;
+    }
+}
 
 /** 更新機能*/
 /** 「更新」ボタンを表示する関数 */
@@ -198,6 +224,9 @@ function hideAllFormsAndButtons() {
     document.querySelectorAll('input[type="checkbox"][name="selectedBooks"]').forEach(cb => {
         cb.style.display = 'none';
     });
+
+    // プルダウン
+    document.getElementById('bookCount').style.display = 'none';
 
     // アクション列
     document.getElementById('action-header').style.display = 'none';

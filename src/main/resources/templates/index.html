@@ -61,21 +61,17 @@
     </tbody>
 </table>
 
-<!--登録用フォーム、ボタン-->
-<form action="/addBook" id="add-form" style="display: none;" method="post">
-    <div class="row">
-        <div class="col">
-            <input type="text" class="form-control" name="title" placeholder="タイトル" required>
-        </div>
-        <div class="col">
-            <input type="text" class="form-control" name="author" placeholder="著者">
-        </div>
-        <div class="col">
-            <input type="text" class="form-control" name="genre" placeholder="ジャンル">
-        </div>
-    </div>
+<!-- 登録数選択プルダウン（最大10件） -->
+<select id="bookCount" onchange="generateForms()" class="form-select w-auto my-3" style="display: none;">
+    <option value="">登録数を選択</option>
+    <option th:each="i : ${#numbers.sequence(1,10)}" th:value="${i}" th:text="${i}">1</option>
+</select>
+
+<!-- 登録用フォーム、ボタン -->
+<form action="/addBooks" id="add-form" method="post">
+    <div id="book-forms"></div>
+    <button type="submit" class="btn btn-outline-success" id="add-btn" style="display: none;">登録</button>
 </form>
-<button type="button" class="btn btn-outline-success" id="add-btn" style="display: none;" onclick="submitForm()">登録</button>
 
 <!--更新用フォーム、ボタン-->
 <button type="button" class="btn btn-outline-primary" id="update-btn" style="display: none;" onclick="showUpdateForm()">更新</button>

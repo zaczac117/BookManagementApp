@@ -28,14 +28,27 @@ public class BookController {
         return "index";
     }
 
-    @PostMapping("/addBook")
-    public String addBook(Book book) {
-        bookService.saveBook(book);
+    // 書籍登録処理
+    @PostMapping("/addBooks")
+    public String addBooks(@ModelAttribute("bookList") BookListWrapper bookList, RedirectAttributes redirectAttributes) {
+        List<Book> booksToAdd = bookList.getBooks().stream()
+                .filter(book -> book.getTitle() != null && !book.getTitle().isBlank()) // タイトル必須
+                .collect(Collectors.toList());
+
+        if (booksToAdd.isEmpty()) {
+            redirectAttributes.addFlashAttribute("message", "登録する書籍がありません。");
+            return "redirect:/";
+        }
+
+        for (Book book : booksToAdd) {
+            bookService.saveBook(book); // DB登録処理
+        }
+
+        redirectAttributes.addFlashAttribute("message", "書籍を登録しました。");
         return "redirect:/";
     }
 
-
-    // 選択されたIDの書籍更新
+    // 書籍更新処理
     @PostMapping("/updateBooks")
     public String updateBooks(@ModelAttribute BookListWrapper bookList, RedirectAttributes redirectAttributes) {
         // 🔹 null チェックを行い、入力があるデータのみリスト化
@@ -60,7 +73,7 @@ public class BookController {
         return "redirect:/";
     }
 
-    // 選択されたIDの書籍削除
+    // 書籍削除処理
     @PostMapping("/deleteBooks")
     public ResponseEntity<Map<String, String>> deleteBooks(@RequestBody Map<String, List<Long>> requestBody) {
         List<Long> ids = requestBody.get("ids");
