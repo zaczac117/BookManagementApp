@@ -13,6 +13,9 @@
 
 /** 「登録」ボタン押下時に、入力フォームの内容を送信する関数 */
     function submitForm() {
+        if (!validateAddForm()) {
+            return;
+        }
         document.getElementById('add-form').submit();
     }
 
@@ -75,7 +78,7 @@
                         <input type="hidden" class="form-control" name="books[${bookId}].id" value="${bookId}">
                     </div>
                     <div class="col">
-                        <input type="text" class="form-control" name="books[${bookId}].title" placeholder="タイトル" required>
+                        <input type="text" class="form-control" id="title-${bookId}" name="books[${bookId}].title" placeholder="タイトル" required>
                     </div>
                     <div class="col">
                         <input type="text" class="form-control" name="books[${bookId}].author" placeholder="著者">
@@ -99,6 +102,9 @@
 
 /** 「更新」ボタン押下時に、入力フォームの内容を送信する関数 */
     function updateForm() {
+        if (!validateUpdateForm()) {
+            return;
+        }
         document.getElementById('update-form').submit();
     }
 
